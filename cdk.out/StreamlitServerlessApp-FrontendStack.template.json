@@ -1,0 +1,1586 @@
+{
+ "Resources": {
+  "AppExecuteRole456B3EA0": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/AppExecuteRole/Resource"
+   }
+  },
+  "AppExecuteRoleDefaultPolicyB3F9CDAA": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:BatchGetImage",
+        "ecr:GetAuthorizationToken",
+        "ecr:GetDownloadUrlForLayer",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "AppExecuteRoleDefaultPolicyB3F9CDAA",
+    "Roles": [
+     {
+      "Ref": "AppExecuteRole456B3EA0"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/AppExecuteRole/DefaultPolicy/Resource"
+   }
+  },
+  "StreamlitECSVpc74386470": {
+   "Type": "AWS::EC2::VPC",
+   "Properties": {
+    "CidrBlock": "10.0.0.0/16",
+    "EnableDnsHostnames": true,
+    "EnableDnsSupport": true,
+    "InstanceTenancy": "default",
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/Resource"
+   }
+  },
+  "StreamlitECSVpcpublicSubnet1Subnet11BB8C99": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": {
+     "Fn::Select": [
+      0,
+      {
+       "Fn::GetAZs": ""
+      }
+     ]
+    },
+    "CidrBlock": "10.0.0.0/19",
+    "MapPublicIpOnLaunch": true,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "public"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Public"
+     },
+     {
+      "Key": "Name",
+      "Value": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/publicSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "StreamlitECSVpc74386470"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/publicSubnet1/Subnet"
+   }
+  },
+  "StreamlitECSVpcpublicSubnet1RouteTableDFA49D18": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/publicSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "StreamlitECSVpc74386470"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/publicSubnet1/RouteTable"
+   }
+  },
+  "StreamlitECSVpcpublicSubnet1RouteTableAssociation7B1B2712": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "StreamlitECSVpcpublicSubnet1RouteTableDFA49D18"
+    },
+    "SubnetId": {
+     "Ref": "StreamlitECSVpcpublicSubnet1Subnet11BB8C99"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/publicSubnet1/RouteTableAssociation"
+   }
+  },
+  "StreamlitECSVpcpublicSubnet1DefaultRouteC46930CA": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "GatewayId": {
+     "Ref": "StreamlitECSVpcIGW108CFC58"
+    },
+    "RouteTableId": {
+     "Ref": "StreamlitECSVpcpublicSubnet1RouteTableDFA49D18"
+    }
+   },
+   "DependsOn": [
+    "StreamlitECSVpcVPCGWBF3FBD58"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/publicSubnet1/DefaultRoute"
+   }
+  },
+  "StreamlitECSVpcpublicSubnet1EIPC1CA433A": {
+   "Type": "AWS::EC2::EIP",
+   "Properties": {
+    "Domain": "vpc",
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/publicSubnet1"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/publicSubnet1/EIP"
+   }
+  },
+  "StreamlitECSVpcpublicSubnet1NATGateway86430E72": {
+   "Type": "AWS::EC2::NatGateway",
+   "Properties": {
+    "AllocationId": {
+     "Fn::GetAtt": [
+      "StreamlitECSVpcpublicSubnet1EIPC1CA433A",
+      "AllocationId"
+     ]
+    },
+    "SubnetId": {
+     "Ref": "StreamlitECSVpcpublicSubnet1Subnet11BB8C99"
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/publicSubnet1"
+     }
+    ]
+   },
+   "DependsOn": [
+    "StreamlitECSVpcpublicSubnet1DefaultRouteC46930CA",
+    "StreamlitECSVpcpublicSubnet1RouteTableAssociation7B1B2712"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/publicSubnet1/NATGateway"
+   }
+  },
+  "StreamlitECSVpcpublicSubnet2Subnet978585B3": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": {
+     "Fn::Select": [
+      1,
+      {
+       "Fn::GetAZs": ""
+      }
+     ]
+    },
+    "CidrBlock": "10.0.32.0/19",
+    "MapPublicIpOnLaunch": true,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "public"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Public"
+     },
+     {
+      "Key": "Name",
+      "Value": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/publicSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "StreamlitECSVpc74386470"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/publicSubnet2/Subnet"
+   }
+  },
+  "StreamlitECSVpcpublicSubnet2RouteTable0D256E66": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/publicSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "StreamlitECSVpc74386470"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/publicSubnet2/RouteTable"
+   }
+  },
+  "StreamlitECSVpcpublicSubnet2RouteTableAssociation9F90A881": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "StreamlitECSVpcpublicSubnet2RouteTable0D256E66"
+    },
+    "SubnetId": {
+     "Ref": "StreamlitECSVpcpublicSubnet2Subnet978585B3"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/publicSubnet2/RouteTableAssociation"
+   }
+  },
+  "StreamlitECSVpcpublicSubnet2DefaultRouteED78768C": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "GatewayId": {
+     "Ref": "StreamlitECSVpcIGW108CFC58"
+    },
+    "RouteTableId": {
+     "Ref": "StreamlitECSVpcpublicSubnet2RouteTable0D256E66"
+    }
+   },
+   "DependsOn": [
+    "StreamlitECSVpcVPCGWBF3FBD58"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/publicSubnet2/DefaultRoute"
+   }
+  },
+  "StreamlitECSVpcpublicSubnet2EIPB63A8A99": {
+   "Type": "AWS::EC2::EIP",
+   "Properties": {
+    "Domain": "vpc",
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/publicSubnet2"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/publicSubnet2/EIP"
+   }
+  },
+  "StreamlitECSVpcpublicSubnet2NATGatewayDECD51C2": {
+   "Type": "AWS::EC2::NatGateway",
+   "Properties": {
+    "AllocationId": {
+     "Fn::GetAtt": [
+      "StreamlitECSVpcpublicSubnet2EIPB63A8A99",
+      "AllocationId"
+     ]
+    },
+    "SubnetId": {
+     "Ref": "StreamlitECSVpcpublicSubnet2Subnet978585B3"
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/publicSubnet2"
+     }
+    ]
+   },
+   "DependsOn": [
+    "StreamlitECSVpcpublicSubnet2DefaultRouteED78768C",
+    "StreamlitECSVpcpublicSubnet2RouteTableAssociation9F90A881"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/publicSubnet2/NATGateway"
+   }
+  },
+  "StreamlitECSVpcprivateSubnet1SubnetEFB86860": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": {
+     "Fn::Select": [
+      0,
+      {
+       "Fn::GetAZs": ""
+      }
+     ]
+    },
+    "CidrBlock": "10.0.64.0/19",
+    "MapPublicIpOnLaunch": false,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "private"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Private"
+     },
+     {
+      "Key": "Name",
+      "Value": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/privateSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "StreamlitECSVpc74386470"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/privateSubnet1/Subnet"
+   }
+  },
+  "StreamlitECSVpcprivateSubnet1RouteTable89E5F07F": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/privateSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "StreamlitECSVpc74386470"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/privateSubnet1/RouteTable"
+   }
+  },
+  "StreamlitECSVpcprivateSubnet1RouteTableAssociation7E80F109": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "StreamlitECSVpcprivateSubnet1RouteTable89E5F07F"
+    },
+    "SubnetId": {
+     "Ref": "StreamlitECSVpcprivateSubnet1SubnetEFB86860"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/privateSubnet1/RouteTableAssociation"
+   }
+  },
+  "StreamlitECSVpcprivateSubnet1DefaultRoute5701E4CF": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "NatGatewayId": {
+     "Ref": "StreamlitECSVpcpublicSubnet1NATGateway86430E72"
+    },
+    "RouteTableId": {
+     "Ref": "StreamlitECSVpcprivateSubnet1RouteTable89E5F07F"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/privateSubnet1/DefaultRoute"
+   }
+  },
+  "StreamlitECSVpcprivateSubnet2Subnet2249F766": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": {
+     "Fn::Select": [
+      1,
+      {
+       "Fn::GetAZs": ""
+      }
+     ]
+    },
+    "CidrBlock": "10.0.96.0/19",
+    "MapPublicIpOnLaunch": false,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "private"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Private"
+     },
+     {
+      "Key": "Name",
+      "Value": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/privateSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "StreamlitECSVpc74386470"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/privateSubnet2/Subnet"
+   }
+  },
+  "StreamlitECSVpcprivateSubnet2RouteTable708A161C": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/privateSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "StreamlitECSVpc74386470"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/privateSubnet2/RouteTable"
+   }
+  },
+  "StreamlitECSVpcprivateSubnet2RouteTableAssociation22AA8081": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "StreamlitECSVpcprivateSubnet2RouteTable708A161C"
+    },
+    "SubnetId": {
+     "Ref": "StreamlitECSVpcprivateSubnet2Subnet2249F766"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/privateSubnet2/RouteTableAssociation"
+   }
+  },
+  "StreamlitECSVpcprivateSubnet2DefaultRouteA1873714": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "NatGatewayId": {
+     "Ref": "StreamlitECSVpcpublicSubnet2NATGatewayDECD51C2"
+    },
+    "RouteTableId": {
+     "Ref": "StreamlitECSVpcprivateSubnet2RouteTable708A161C"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/privateSubnet2/DefaultRoute"
+   }
+  },
+  "StreamlitECSVpcisolatedSubnet1Subnet1F06308B": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": {
+     "Fn::Select": [
+      0,
+      {
+       "Fn::GetAZs": ""
+      }
+     ]
+    },
+    "CidrBlock": "10.0.128.0/19",
+    "MapPublicIpOnLaunch": false,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "isolated"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Isolated"
+     },
+     {
+      "Key": "Name",
+      "Value": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/isolatedSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "StreamlitECSVpc74386470"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/isolatedSubnet1/Subnet"
+   }
+  },
+  "StreamlitECSVpcisolatedSubnet1RouteTable2321D7DC": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/isolatedSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "StreamlitECSVpc74386470"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/isolatedSubnet1/RouteTable"
+   }
+  },
+  "StreamlitECSVpcisolatedSubnet1RouteTableAssociation639534C9": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "StreamlitECSVpcisolatedSubnet1RouteTable2321D7DC"
+    },
+    "SubnetId": {
+     "Ref": "StreamlitECSVpcisolatedSubnet1Subnet1F06308B"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/isolatedSubnet1/RouteTableAssociation"
+   }
+  },
+  "StreamlitECSVpcisolatedSubnet2Subnet9BCB0AF9": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": {
+     "Fn::Select": [
+      1,
+      {
+       "Fn::GetAZs": ""
+      }
+     ]
+    },
+    "CidrBlock": "10.0.160.0/19",
+    "MapPublicIpOnLaunch": false,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "isolated"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Isolated"
+     },
+     {
+      "Key": "Name",
+      "Value": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/isolatedSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "StreamlitECSVpc74386470"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/isolatedSubnet2/Subnet"
+   }
+  },
+  "StreamlitECSVpcisolatedSubnet2RouteTable7A673098": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/isolatedSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "StreamlitECSVpc74386470"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/isolatedSubnet2/RouteTable"
+   }
+  },
+  "StreamlitECSVpcisolatedSubnet2RouteTableAssociation09467790": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "StreamlitECSVpcisolatedSubnet2RouteTable7A673098"
+    },
+    "SubnetId": {
+     "Ref": "StreamlitECSVpcisolatedSubnet2Subnet9BCB0AF9"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/isolatedSubnet2/RouteTableAssociation"
+   }
+  },
+  "StreamlitECSVpcIGW108CFC58": {
+   "Type": "AWS::EC2::InternetGateway",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/IGW"
+   }
+  },
+  "StreamlitECSVpcVPCGWBF3FBD58": {
+   "Type": "AWS::EC2::VPCGatewayAttachment",
+   "Properties": {
+    "InternetGatewayId": {
+     "Ref": "StreamlitECSVpcIGW108CFC58"
+    },
+    "VpcId": {
+     "Ref": "StreamlitECSVpc74386470"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/VPCGW"
+   }
+  },
+  "StreamlitECSVpcRestrictDefaultSecurityGroupCustomResourceCF66C91B": {
+   "Type": "Custom::VpcRestrictDefaultSG",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "CustomVpcRestrictDefaultSGCustomResourceProviderHandlerDC833E5E",
+      "Arn"
+     ]
+    },
+    "DefaultSecurityGroupId": {
+     "Fn::GetAtt": [
+      "StreamlitECSVpc74386470",
+      "DefaultSecurityGroup"
+     ]
+    },
+    "Account": {
+     "Ref": "AWS::AccountId"
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/RestrictDefaultSecurityGroupCustomResource/Default"
+   }
+  },
+  "CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Version": "2012-10-17",
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ]
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Sub": "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+     }
+    ],
+    "Policies": [
+     {
+      "PolicyName": "Inline",
+      "PolicyDocument": {
+       "Version": "2012-10-17",
+       "Statement": [
+        {
+         "Effect": "Allow",
+         "Action": [
+          "ec2:AuthorizeSecurityGroupIngress",
+          "ec2:AuthorizeSecurityGroupEgress",
+          "ec2:RevokeSecurityGroupIngress",
+          "ec2:RevokeSecurityGroupEgress"
+         ],
+         "Resource": [
+          {
+           "Fn::Join": [
+            "",
+            [
+             "arn:",
+             {
+              "Ref": "AWS::Partition"
+             },
+             ":ec2:",
+             {
+              "Ref": "AWS::Region"
+             },
+             ":",
+             {
+              "Ref": "AWS::AccountId"
+             },
+             ":security-group/",
+             {
+              "Fn::GetAtt": [
+               "StreamlitECSVpc74386470",
+               "DefaultSecurityGroup"
+              ]
+             }
+            ]
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/Custom::VpcRestrictDefaultSGCustomResourceProvider/Role"
+   }
+  },
+  "CustomVpcRestrictDefaultSGCustomResourceProviderHandlerDC833E5E": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "e77031893275c08bcaa0a774aa8b611727afd045b3b5d8e1e6f0f04063d9d386.zip"
+    },
+    "Timeout": 900,
+    "MemorySize": 128,
+    "Handler": "__entrypoint__.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs16.x",
+    "Description": "Lambda function for removing all inbound/outbound rules from the VPC default security group"
+   },
+   "DependsOn": [
+    "CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/Custom::VpcRestrictDefaultSGCustomResourceProvider/Handler",
+    "aws:asset:path": "asset.e77031893275c08bcaa0a774aa8b611727afd045b3b5d8e1e6f0f04063d9d386",
+    "aws:asset:property": "Code"
+   }
+  },
+  "StreamlitAppClusterD1D4CC7D": {
+   "Type": "AWS::ECS::Cluster",
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/StreamlitAppCluster/Resource"
+   }
+  },
+  "StreamlitAppServiceLB0103B455": {
+   "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+   "Properties": {
+    "LoadBalancerAttributes": [
+     {
+      "Key": "deletion_protection.enabled",
+      "Value": "false"
+     }
+    ],
+    "Scheme": "internet-facing",
+    "SecurityGroups": [
+     {
+      "Fn::GetAtt": [
+       "StreamlitAppServiceLBSecurityGroup54AF61D5",
+       "GroupId"
+      ]
+     }
+    ],
+    "Subnets": [
+     {
+      "Ref": "StreamlitECSVpcpublicSubnet1Subnet11BB8C99"
+     },
+     {
+      "Ref": "StreamlitECSVpcpublicSubnet2Subnet978585B3"
+     }
+    ],
+    "Type": "application"
+   },
+   "DependsOn": [
+    "StreamlitECSVpcpublicSubnet1DefaultRouteC46930CA",
+    "StreamlitECSVpcpublicSubnet1RouteTableAssociation7B1B2712",
+    "StreamlitECSVpcpublicSubnet2DefaultRouteED78768C",
+    "StreamlitECSVpcpublicSubnet2RouteTableAssociation9F90A881"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/StreamlitAppService/LB/Resource"
+   }
+  },
+  "StreamlitAppServiceLBSecurityGroup54AF61D5": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "Automatically created Security Group for ELB StreamlitServerlessAppFrontendStackStreamlitAppServiceLB81E014F9",
+    "SecurityGroupIngress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow from anyone on port 80",
+      "FromPort": 80,
+      "IpProtocol": "tcp",
+      "ToPort": 80
+     }
+    ],
+    "VpcId": {
+     "Ref": "StreamlitECSVpc74386470"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/StreamlitAppService/LB/SecurityGroup/Resource"
+   }
+  },
+  "StreamlitAppServiceLBSecurityGrouptoStreamlitServerlessAppFrontendStackStreamlitAppServiceSecurityGroup46650EA4850185398EAC": {
+   "Type": "AWS::EC2::SecurityGroupEgress",
+   "Properties": {
+    "Description": "Load balancer to target",
+    "DestinationSecurityGroupId": {
+     "Fn::GetAtt": [
+      "StreamlitAppServiceSecurityGroup55350F28",
+      "GroupId"
+     ]
+    },
+    "FromPort": 8501,
+    "GroupId": {
+     "Fn::GetAtt": [
+      "StreamlitAppServiceLBSecurityGroup54AF61D5",
+      "GroupId"
+     ]
+    },
+    "IpProtocol": "tcp",
+    "ToPort": 8501
+   },
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/StreamlitAppService/LB/SecurityGroup/to StreamlitServerlessAppFrontendStackStreamlitAppServiceSecurityGroup46650EA4:8501"
+   }
+  },
+  "StreamlitAppServiceLBPublicListenerE20219D2": {
+   "Type": "AWS::ElasticLoadBalancingV2::Listener",
+   "Properties": {
+    "DefaultActions": [
+     {
+      "TargetGroupArn": {
+       "Ref": "StreamlitAppServiceLBPublicListenerECSGroup28923722"
+      },
+      "Type": "forward"
+     }
+    ],
+    "LoadBalancerArn": {
+     "Ref": "StreamlitAppServiceLB0103B455"
+    },
+    "Port": 80,
+    "Protocol": "HTTP"
+   },
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/StreamlitAppService/LB/PublicListener/Resource"
+   }
+  },
+  "StreamlitAppServiceLBPublicListenerECSGroup28923722": {
+   "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+   "Properties": {
+    "HealthCheckPath": "/healthz",
+    "Port": 80,
+    "Protocol": "HTTP",
+    "TargetGroupAttributes": [
+     {
+      "Key": "stickiness.enabled",
+      "Value": "false"
+     }
+    ],
+    "TargetType": "ip",
+    "VpcId": {
+     "Ref": "StreamlitECSVpc74386470"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/StreamlitAppService/LB/PublicListener/ECSGroup/Resource"
+   }
+  },
+  "StreamlitAppServiceTaskDef24E70EE9": {
+   "Type": "AWS::ECS::TaskDefinition",
+   "Properties": {
+    "ContainerDefinitions": [
+     {
+      "Essential": true,
+      "Image": {
+       "Fn::Sub": "${AWS::AccountId}.dkr.ecr.${AWS::Region}.${AWS::URLSuffix}/cdk-hnb659fds-container-assets-${AWS::AccountId}-${AWS::Region}:63f17355d8de1260dff1aee20636c24cb7107074eb9d447bd8366635ac4acb81"
+      },
+      "LogConfiguration": {
+       "LogDriver": "awslogs",
+       "Options": {
+        "awslogs-group": {
+         "Ref": "StreamlitAppServiceTaskDefwebLogGroup4A3303E7"
+        },
+        "awslogs-stream-prefix": "StreamlitAppService",
+        "awslogs-region": {
+         "Ref": "AWS::Region"
+        }
+       }
+      },
+      "Name": "web",
+      "PortMappings": [
+       {
+        "ContainerPort": 8501,
+        "Protocol": "tcp"
+       }
+      ]
+     }
+    ],
+    "Cpu": "256",
+    "ExecutionRoleArn": {
+     "Fn::GetAtt": [
+      "StreamlitAppServiceTaskDefExecutionRoleC0A36B03",
+      "Arn"
+     ]
+    },
+    "Family": "StreamlitServerlessAppFrontendStackStreamlitAppServiceTaskDef3AF73FF8",
+    "Memory": "512",
+    "NetworkMode": "awsvpc",
+    "RequiresCompatibilities": [
+     "FARGATE"
+    ],
+    "RuntimePlatform": {
+     "CpuArchitecture": "X86_64",
+     "OperatingSystemFamily": "LINUX"
+    },
+    "TaskRoleArn": {
+     "Fn::GetAtt": [
+      "AppExecuteRole456B3EA0",
+      "Arn"
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/StreamlitAppService/TaskDef/Resource"
+   }
+  },
+  "StreamlitAppServiceTaskDefwebLogGroup4A3303E7": {
+   "Type": "AWS::Logs::LogGroup",
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/StreamlitAppService/TaskDef/web/LogGroup/Resource"
+   }
+  },
+  "StreamlitAppServiceTaskDefExecutionRoleC0A36B03": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/StreamlitAppService/TaskDef/ExecutionRole/Resource"
+   }
+  },
+  "StreamlitAppServiceTaskDefExecutionRoleDefaultPolicy8F3F06E4": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:BatchGetImage",
+        "ecr:GetDownloadUrlForLayer"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":ecr:",
+          {
+           "Ref": "AWS::Region"
+          },
+          ":",
+          {
+           "Ref": "AWS::AccountId"
+          },
+          ":repository/",
+          {
+           "Fn::Sub": "cdk-hnb659fds-container-assets-${AWS::AccountId}-${AWS::Region}"
+          }
+         ]
+        ]
+       }
+      },
+      {
+       "Action": "ecr:GetAuthorizationToken",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "StreamlitAppServiceTaskDefwebLogGroup4A3303E7",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "StreamlitAppServiceTaskDefExecutionRoleDefaultPolicy8F3F06E4",
+    "Roles": [
+     {
+      "Ref": "StreamlitAppServiceTaskDefExecutionRoleC0A36B03"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/StreamlitAppService/TaskDef/ExecutionRole/DefaultPolicy/Resource"
+   }
+  },
+  "StreamlitAppService6B26D852": {
+   "Type": "AWS::ECS::Service",
+   "Properties": {
+    "Cluster": {
+     "Ref": "StreamlitAppClusterD1D4CC7D"
+    },
+    "DeploymentConfiguration": {
+     "Alarms": {
+      "AlarmNames": [],
+      "Enable": false,
+      "Rollback": false
+     },
+     "MaximumPercent": 200,
+     "MinimumHealthyPercent": 50
+    },
+    "EnableECSManagedTags": false,
+    "HealthCheckGracePeriodSeconds": 60,
+    "LaunchType": "FARGATE",
+    "LoadBalancers": [
+     {
+      "ContainerName": "web",
+      "ContainerPort": 8501,
+      "TargetGroupArn": {
+       "Ref": "StreamlitAppServiceLBPublicListenerECSGroup28923722"
+      }
+     }
+    ],
+    "NetworkConfiguration": {
+     "AwsvpcConfiguration": {
+      "AssignPublicIp": "DISABLED",
+      "SecurityGroups": [
+       {
+        "Fn::GetAtt": [
+         "StreamlitAppServiceSecurityGroup55350F28",
+         "GroupId"
+        ]
+       }
+      ],
+      "Subnets": [
+       {
+        "Ref": "StreamlitECSVpcprivateSubnet1SubnetEFB86860"
+       },
+       {
+        "Ref": "StreamlitECSVpcprivateSubnet2Subnet2249F766"
+       }
+      ]
+     }
+    },
+    "TaskDefinition": {
+     "Ref": "StreamlitAppServiceTaskDef24E70EE9"
+    }
+   },
+   "DependsOn": [
+    "AppExecuteRoleDefaultPolicyB3F9CDAA",
+    "AppExecuteRole456B3EA0",
+    "MyApplicationListenerRule5ECAE1C8",
+    "StreamlitAppServiceLBPublicListenerECSGroup28923722",
+    "StreamlitAppServiceLBPublicListenerE20219D2"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/StreamlitAppService/Service/Service"
+   }
+  },
+  "StreamlitAppServiceSecurityGroup55350F28": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "StreamlitServerlessApp-FrontendStack/StreamlitAppService/Service/SecurityGroup",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "StreamlitECSVpc74386470"
+    }
+   },
+   "DependsOn": [
+    "AppExecuteRoleDefaultPolicyB3F9CDAA",
+    "AppExecuteRole456B3EA0"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/StreamlitAppService/Service/SecurityGroup/Resource"
+   }
+  },
+  "StreamlitAppServiceSecurityGroupfromStreamlitServerlessAppFrontendStackStreamlitAppServiceLBSecurityGroupD77D803D850199E66791": {
+   "Type": "AWS::EC2::SecurityGroupIngress",
+   "Properties": {
+    "Description": "Load balancer to target",
+    "FromPort": 8501,
+    "GroupId": {
+     "Fn::GetAtt": [
+      "StreamlitAppServiceSecurityGroup55350F28",
+      "GroupId"
+     ]
+    },
+    "IpProtocol": "tcp",
+    "SourceSecurityGroupId": {
+     "Fn::GetAtt": [
+      "StreamlitAppServiceLBSecurityGroup54AF61D5",
+      "GroupId"
+     ]
+    },
+    "ToPort": 8501
+   },
+   "DependsOn": [
+    "AppExecuteRoleDefaultPolicyB3F9CDAA",
+    "AppExecuteRole456B3EA0"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/StreamlitAppService/Service/SecurityGroup/from StreamlitServerlessAppFrontendStackStreamlitAppServiceLBSecurityGroupD77D803D:8501"
+   }
+  },
+  "StreamLitCloudFrontDistributionF06FE066": {
+   "Type": "AWS::CloudFront::Distribution",
+   "Properties": {
+    "DistributionConfig": {
+     "Comment": "CloudFront distribution for Streamlit frontend application",
+     "DefaultCacheBehavior": {
+      "AllowedMethods": [
+       "GET",
+       "HEAD",
+       "OPTIONS",
+       "PUT",
+       "PATCH",
+       "POST",
+       "DELETE"
+      ],
+      "CachePolicyId": "4135ea2d-6df8-44a3-9df3-4b5a84be39ad",
+      "Compress": false,
+      "OriginRequestPolicyId": "33f36d7e-f396-46d9-90e0-52428a34d9dc",
+      "ResponseHeadersPolicyId": "60669652-455b-4ae9-85a4-c4c02393f86c",
+      "TargetOriginId": "StreamlitServerlessAppFrontendStackStreamLitCloudFrontDistributionOrigin180B71D48",
+      "ViewerProtocolPolicy": "redirect-to-https"
+     },
+     "Enabled": true,
+     "HttpVersion": "http2",
+     "IPV6Enabled": true,
+     "Origins": [
+      {
+       "CustomOriginConfig": {
+        "HTTPPort": 80,
+        "OriginProtocolPolicy": "http-only",
+        "OriginSSLProtocols": [
+         "TLSv1.2"
+        ]
+       },
+       "DomainName": {
+        "Fn::GetAtt": [
+         "StreamlitAppServiceLB0103B455",
+         "DNSName"
+        ]
+       },
+       "Id": "StreamlitServerlessAppFrontendStackStreamLitCloudFrontDistributionOrigin180B71D48",
+       "OriginCustomHeaders": [
+        {
+         "HeaderName": "X-Verify-Origin",
+         "HeaderValue": "StreamlitServerlessApp-FrontendStack-StreamLitCloudFrontDistribution"
+        }
+       ],
+       "OriginPath": ""
+      }
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/StreamLitCloudFrontDistribution/Resource"
+   }
+  },
+  "MyApplicationListenerRule5ECAE1C8": {
+   "Type": "AWS::ElasticLoadBalancingV2::ListenerRule",
+   "Properties": {
+    "Actions": [
+     {
+      "TargetGroupArn": {
+       "Ref": "StreamlitAppServiceLBPublicListenerECSGroup28923722"
+      },
+      "Type": "forward"
+     }
+    ],
+    "Conditions": [
+     {
+      "Field": "http-header",
+      "HttpHeaderConfig": {
+       "HttpHeaderName": "X-Verify-Origin",
+       "Values": [
+        "StreamlitServerlessApp-FrontendStack-StreamLitCloudFrontDistribution"
+       ]
+      }
+     }
+    ],
+    "ListenerArn": {
+     "Ref": "StreamlitAppServiceLBPublicListenerE20219D2"
+    },
+    "Priority": 1
+   },
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/MyApplicationListenerRule/Resource"
+   }
+  },
+  "RedirectApplicationListenerRule454B2EAA": {
+   "Type": "AWS::ElasticLoadBalancingV2::ListenerRule",
+   "Properties": {
+    "Actions": [
+     {
+      "RedirectConfig": {
+       "Host": {
+        "Fn::GetAtt": [
+         "StreamLitCloudFrontDistributionF06FE066",
+         "DomainName"
+        ]
+       },
+       "Port": "443",
+       "Protocol": "HTTPS",
+       "StatusCode": "HTTP_301"
+      },
+      "Type": "redirect"
+     }
+    ],
+    "Conditions": [
+     {
+      "Field": "path-pattern",
+      "PathPatternConfig": {
+       "Values": [
+        "*"
+       ]
+      }
+     }
+    ],
+    "ListenerArn": {
+     "Ref": "StreamlitAppServiceLBPublicListenerE20219D2"
+    },
+    "Priority": 5
+   },
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/RedirectApplicationListenerRule/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/31SXW/bMAz8LX1X1LUDBvQxTboiQLEaTtHXgJYZl4stGfpIYRj+76PkuHHbYE86nkhKd+StvLuRP67g3S1UeVjUVMh+60EdBFO7HpXdgXPonVwbdUC7aaDCZWQE38kcW+PIG9vdg0NB0Mg+NzWK1V6nMzM1qS6GIxq47Fb2r62K3Gu2Elko+GIbCs09mTuj3ASPL1CM7Ub+zPEnjCLwZPRHcgQPmywef8A/gsd36ERm6cjw3HijPVrGU8L4k1O09Cz/rUHtxRZVsOS7R2tCm/7wX+KhsujcN3qjEx+VO9mv6uD49Zg1wd9gK4iq3GGNe9I0afrKGO2BNNoZd6rdoj2SGn0aYXpu14KPUp1cti27nNx6MlDeQw1aYfmlHGtwnlTNGUXKIF0deVyXq5OIT/E8j1ibPuVMeHb/wi/zBCYj5+GFLnkYl2AeD6I2FTv6ZKqPNhMeBIsI5d6yZbJfc5WlIky+zuNhEGmdeekrVitydCbYaCUPxzTnkFfs8lVmzZHKUelz8G1IO8bDKtOIBpF1/s3o65/yTt78uvrriBY2aE8Nynw8/wEfXrf9hgMAAA=="
+   },
+   "Metadata": {
+    "aws:cdk:path": "StreamlitServerlessApp-FrontendStack/CDKMetadata/Default"
+   },
+   "Condition": "CDKMetadataAvailable"
+  }
+ },
+ "Outputs": {
+  "StreamlitAppServiceLoadBalancerDNSAAB023B6": {
+   "Value": {
+    "Fn::GetAtt": [
+     "StreamlitAppServiceLB0103B455",
+     "DNSName"
+    ]
+   }
+  },
+  "StreamlitAppServiceServiceURL691D6572": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "http://",
+      {
+       "Fn::GetAtt": [
+        "StreamlitAppServiceLB0103B455",
+        "DNSName"
+       ]
+      }
+     ]
+    ]
+   }
+  },
+  "StreamlitLoadbalancer": {
+   "Value": {
+    "Fn::GetAtt": [
+     "StreamlitAppServiceLB0103B455",
+     "DNSName"
+    ]
+   }
+  },
+  "StreamlitURL": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Fn::GetAtt": [
+        "StreamLitCloudFrontDistributionF06FE066",
+        "DomainName"
+       ]
+      }
+     ]
+    ]
+   }
+  }
+ },
+ "Conditions": {
+  "CDKMetadataAvailable": {
+   "Fn::Or": [
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "af-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ca-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-northwest-1"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-3"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "me-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "sa-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-2"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-west-2"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

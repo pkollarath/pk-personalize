@@ -1,0 +1,394 @@
+{
+  "version": "33.0.0",
+  "artifacts": {
+    "StreamlitServerlessApp-FrontendStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "StreamlitServerlessApp-FrontendStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "StreamlitServerlessApp-FrontendStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/unknown-region",
+      "properties": {
+        "templateFile": "StreamlitServerlessApp-FrontendStack.template.json",
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/f5ab1c257cfe1eacf37bb33e0431a62d166bd961b95832b81830be97ab3c3300.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "StreamlitServerlessApp-FrontendStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-${AWS::Region}",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "StreamlitServerlessApp-FrontendStack.assets"
+      ],
+      "metadata": {
+        "/StreamlitServerlessApp-FrontendStack/AppExecuteRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AppExecuteRole456B3EA0"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/AppExecuteRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AppExecuteRoleDefaultPolicyB3F9CDAA"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitECSVpc74386470"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/publicSubnet1/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitECSVpcpublicSubnet1Subnet11BB8C99"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/publicSubnet1/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitECSVpcpublicSubnet1RouteTableDFA49D18"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/publicSubnet1/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitECSVpcpublicSubnet1RouteTableAssociation7B1B2712"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/publicSubnet1/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitECSVpcpublicSubnet1DefaultRouteC46930CA"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/publicSubnet1/EIP": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitECSVpcpublicSubnet1EIPC1CA433A"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/publicSubnet1/NATGateway": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitECSVpcpublicSubnet1NATGateway86430E72"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/publicSubnet2/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitECSVpcpublicSubnet2Subnet978585B3"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/publicSubnet2/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitECSVpcpublicSubnet2RouteTable0D256E66"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/publicSubnet2/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitECSVpcpublicSubnet2RouteTableAssociation9F90A881"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/publicSubnet2/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitECSVpcpublicSubnet2DefaultRouteED78768C"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/publicSubnet2/EIP": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitECSVpcpublicSubnet2EIPB63A8A99"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/publicSubnet2/NATGateway": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitECSVpcpublicSubnet2NATGatewayDECD51C2"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/privateSubnet1/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitECSVpcprivateSubnet1SubnetEFB86860"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/privateSubnet1/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitECSVpcprivateSubnet1RouteTable89E5F07F"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/privateSubnet1/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitECSVpcprivateSubnet1RouteTableAssociation7E80F109"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/privateSubnet1/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitECSVpcprivateSubnet1DefaultRoute5701E4CF"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/privateSubnet2/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitECSVpcprivateSubnet2Subnet2249F766"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/privateSubnet2/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitECSVpcprivateSubnet2RouteTable708A161C"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/privateSubnet2/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitECSVpcprivateSubnet2RouteTableAssociation22AA8081"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/privateSubnet2/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitECSVpcprivateSubnet2DefaultRouteA1873714"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/isolatedSubnet1/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitECSVpcisolatedSubnet1Subnet1F06308B"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/isolatedSubnet1/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitECSVpcisolatedSubnet1RouteTable2321D7DC"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/isolatedSubnet1/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitECSVpcisolatedSubnet1RouteTableAssociation639534C9"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/isolatedSubnet2/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitECSVpcisolatedSubnet2Subnet9BCB0AF9"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/isolatedSubnet2/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitECSVpcisolatedSubnet2RouteTable7A673098"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/isolatedSubnet2/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitECSVpcisolatedSubnet2RouteTableAssociation09467790"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/IGW": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitECSVpcIGW108CFC58"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/VPCGW": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitECSVpcVPCGWBF3FBD58"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitECSVpc/RestrictDefaultSecurityGroupCustomResource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitECSVpcRestrictDefaultSecurityGroupCustomResourceCF66C91B"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/Custom::VpcRestrictDefaultSGCustomResourceProvider/Role": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/Custom::VpcRestrictDefaultSGCustomResourceProvider/Handler": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomVpcRestrictDefaultSGCustomResourceProviderHandlerDC833E5E"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitAppCluster/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitAppClusterD1D4CC7D"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitAppService/LB/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitAppServiceLB0103B455"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitAppService/LB/SecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitAppServiceLBSecurityGroup54AF61D5"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitAppService/LB/SecurityGroup/to StreamlitServerlessAppFrontendStackStreamlitAppServiceSecurityGroup46650EA4:8501": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitAppServiceLBSecurityGrouptoStreamlitServerlessAppFrontendStackStreamlitAppServiceSecurityGroup46650EA4850185398EAC"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitAppService/LB/PublicListener/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitAppServiceLBPublicListenerE20219D2"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitAppService/LB/PublicListener/ECSGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitAppServiceLBPublicListenerECSGroup28923722"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitAppService/LoadBalancerDNS": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitAppServiceLoadBalancerDNSAAB023B6"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitAppService/ServiceURL": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitAppServiceServiceURL691D6572"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitAppService/TaskDef/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitAppServiceTaskDef24E70EE9"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitAppService/TaskDef/web/LogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitAppServiceTaskDefwebLogGroup4A3303E7"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitAppService/TaskDef/ExecutionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitAppServiceTaskDefExecutionRoleC0A36B03"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitAppService/TaskDef/ExecutionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitAppServiceTaskDefExecutionRoleDefaultPolicy8F3F06E4"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitAppService/Service/Service": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitAppService6B26D852"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitAppService/Service/SecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitAppServiceSecurityGroup55350F28"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitAppService/Service/SecurityGroup/from StreamlitServerlessAppFrontendStackStreamlitAppServiceLBSecurityGroupD77D803D:8501": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitAppServiceSecurityGroupfromStreamlitServerlessAppFrontendStackStreamlitAppServiceLBSecurityGroupD77D803D850199E66791"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitLoadbalancer": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitLoadbalancer"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamLitCloudFrontDistribution/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamLitCloudFrontDistributionF06FE066"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/StreamlitURL": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StreamlitURL"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/MyApplicationListenerRule/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MyApplicationListenerRule5ECAE1C8"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/RedirectApplicationListenerRule/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RedirectApplicationListenerRule454B2EAA"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/CDKMetadata/Condition": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadataAvailable"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/StreamlitServerlessApp-FrontendStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "StreamlitServerlessApp-FrontendStack"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  }
+}
